@@ -19,6 +19,7 @@ import {
   createSession,
   loadProfile,
   loadSession,
+  loadTailorQuestions,
   saveSession,
 } from "@/lib/session-storage";
 import { RefreshCw, Send, User } from "lucide-react";
@@ -150,6 +151,9 @@ export default function InterviewPage() {
   }, [router, askInterviewer, persistSession]);
 
   async function fetchQuestions(p: OnboardingProfile): Promise<Question[]> {
+    const tailored = loadTailorQuestions();
+    if (tailored && tailored.length > 0) return tailored;
+
     const params = new URLSearchParams({
       role: p.role,
       seniority: p.seniority,

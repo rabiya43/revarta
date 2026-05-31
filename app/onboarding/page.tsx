@@ -77,7 +77,7 @@ export default function OnboardingPage() {
       useStarScaffold,
     };
     saveProfile(profile);
-    router.push("/interview");
+    router.push("/prepare");
   };
 
   return (

@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Revarta",
+    "slug": "revarta",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "revarta",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f8f7fc"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rabiya43.revarta",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Revarta uses the microphone so you can practice answers out loud.",
+        "NSSpeechRecognitionUsageDescription": "Revarta transcribes your spoken answers for feedback."
+      }
+    },
+    "android": {
+      "package": "com.rabiya43.revarta",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#7c4dff"
+      },
+      "permissions": ["RECORD_AUDIO"]
+    },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "extra": {
+      "eas": {
+        "projectId": "replace-with-eas-project-id"
+      }
+    }
+  }
+}

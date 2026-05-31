@@ -55,3 +55,23 @@ Reply with JSON only:
 
 Specificity = real example with names, tools, dates. Impact = metrics. Structure = clear flow. Conciseness = not rambling. If vague, say so.`;
 }
+
+export function buildTailorPrompt(
+  profile: OnboardingProfile,
+  resumeText: string,
+  jobDescriptionText: string
+): string {
+  return `Write 5 interview questions for this candidate.
+
+Role: ${ROLE_LABELS[profile.role]}, level: ${SENIORITY_LABELS[profile.seniority]}, company type: ${COMPANY_LABELS[profile.companyType]}.
+
+Resume:
+${resumeText.slice(0, 6000)}
+
+Job description:
+${jobDescriptionText.slice(0, 6000)}
+
+Return JSON only: { "questions": [ { "id": "t1", "text": "...", "category": "behavioral|technical|situational|culture", "followUpHints": ["..."] } ] }
+
+Questions must reference their real background and the JD. Mix behavioral and role-specific.`;
+}

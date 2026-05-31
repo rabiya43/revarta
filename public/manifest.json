@@ -1,7 +1,7 @@
 {
   "name": "Revarta",
   "short_name": "Revarta",
-  "description": "AI mock interview coach with honest feedback",
+  "description": "Mock interview practice with feedback",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f7fc",

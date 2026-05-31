@@ -101,8 +101,8 @@ export const ROLE_LABELS: Record<Role, string> = {
 };
 
 export const SENIORITY_LABELS: Record<Seniority, string> = {
-  junior: "Junior (0–2 yrs)",
-  mid: "Mid-level (3–5 yrs)",
+  junior: "Junior (0-2 yrs)",
+  mid: "Mid-level (3-5 yrs)",
   senior: "Senior (6+ yrs)",
 };
 

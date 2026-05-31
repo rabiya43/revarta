@@ -206,7 +206,7 @@ export default function InterviewPage() {
       });
     } catch (e) {
       setFeedbackError(
-        e instanceof Error ? e.message : "Couldn't get feedback. Tap retry."
+        e instanceof Error ? e.message : "Feedback failed. Retry."
       );
     } finally {
       setFeedbackLoading(false);
@@ -227,9 +227,7 @@ export default function InterviewPage() {
           candidateAnswer: session.turns.filter((t) => t.role === "candidate").at(-1)?.content,
           history: session.turns,
         });
-      } catch {
-        /* error shown via interviewer.error */
-      }
+      } catch {}
       return;
     }
 
@@ -246,9 +244,7 @@ export default function InterviewPage() {
       setFeedback(null);
       try {
         await askInterviewer(nextSession, questions, { isOpening: true });
-      } catch {
-        /* handled */
-      }
+      } catch {}
     } else {
       clearSession();
       router.push("/complete");
@@ -290,7 +286,7 @@ export default function InterviewPage() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-coral-500 text-white text-sm font-bold">
                   A
                 </div>
-                <span className="text-sm font-bold text-ink-500">Alex · Interviewer</span>
+                <span className="text-sm font-bold text-ink-500">Alex</span>
               </div>
               <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-700">
                 {displayInterviewerText}
@@ -328,7 +324,7 @@ export default function InterviewPage() {
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-coral-500 text-white text-sm font-bold">
                 A
               </div>
-              <span className="text-sm font-bold text-ink-500">Alex · Interviewer</span>
+              <span className="text-sm font-bold text-ink-500">Alex</span>
             </div>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-700">
               {displayInterviewerText}
@@ -389,8 +385,8 @@ export default function InterviewPage() {
               {isLastQuestion && followUpCount >= 1
                 ? "Finish session"
                 : followUpCount < 1
-                  ? "Continue interview →"
-                  : "Next question →"}
+                  ? "Continue"
+                  : "Next question"}
             </button>
           )}
         </div>
@@ -400,8 +396,8 @@ export default function InterviewPage() {
         <Link href="/" className="underline">
           Exit
         </Link>
-        {" · "}
-        Session auto-saves for 24h
+        {" | "}
+        Saves locally for 24h
       </p>
     </main>
   );

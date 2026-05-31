@@ -27,7 +27,7 @@ const swe: BankEntry[] = [
   },
   {
     id: "swe-t2",
-    text: "Explain a recent project on your resume — what was your specific contribution?",
+    text: "Explain a recent project on your resume. What was your specific contribution?",
     category: "technical",
     seniority: ["junior", "mid", "senior"],
     followUpHints: ["metrics", "tradeoffs", "lessons learned"],
@@ -114,7 +114,7 @@ const design: BankEntry[] = [
   },
   {
     id: "des-c1",
-    text: "Critique a popular app — what would you improve and why?",
+    text: "Critique a popular app. What would you improve and why?",
     category: "culture",
     seniority: ["junior", "mid"],
     followUpHints: ["heuristics", "accessibility", "business goals"],
@@ -166,10 +166,10 @@ const BANKS: Record<Role, BankEntry[]> = {
 };
 
 const COMPANY_MODIFIERS: Record<CompanyType, string> = {
-  startup: "Keep in mind they're a fast-moving startup — probe for ownership and scrappiness.",
-  "big-tech": "This is big tech — expect structured thinking, scale, and cross-functional impact.",
-  government: "Government context — emphasize compliance, process, and public impact.",
-  agency: "Agency environment — client management and deadlines matter.",
+  startup: "Startup: dig into ownership and moving fast with little process.",
+  "big-tech": "Big tech: expect scale, tradeoffs, and cross-team impact.",
+  government: "Government: process, compliance, and public impact matter.",
+  agency: "Agency: clients, deadlines, and juggling priorities.",
 };
 
 export function getCompanyModifier(companyType: CompanyType): string {

@@ -32,7 +32,7 @@ export function useInterviewerStream() {
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error ?? "Interview unavailable. Please retry.");
+        throw new Error(err.error ?? "Interview failed. Retry.");
       }
 
       if (!res.body) throw new Error("No response stream");
@@ -47,7 +47,7 @@ export function useInterviewerStream() {
 
       return full;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Something went wrong. Please retry.";
+      const msg = e instanceof Error ? e.message : "Request failed. Retry.";
       setError(msg);
       throw e;
     } finally {

@@ -40,15 +40,13 @@ export function VoiceInput({
         {displayText || (
           <span className="text-ink-300">
             {speech.isListening
-              ? "Listening… speak your answer out loud."
-              : "Tap the mic and answer like you would in a real interview."}
+              ? "Listening..."
+              : "Tap the mic and answer out loud."}
           </span>
         )}
       </div>
 
-      {speech.error && (
-        <p className="text-sm text-coral-600">{speech.error}</p>
-      )}
+      {speech.error && <p className="text-sm text-coral-600">{speech.error}</p>}
 
       <div className="flex flex-wrap items-center justify-center gap-3">
         <button
@@ -83,12 +81,6 @@ export function VoiceInput({
           Type instead
         </button>
       </div>
-
-      {!speech.isSupported && (
-        <p className="text-center text-xs text-ink-400">
-          Voice works best in Chrome / Edge. You can always type your answer.
-        </p>
-      )}
     </div>
   );
 }

@@ -15,9 +15,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Revarta — Mock interviews that actually coach you",
+  title: "Revarta | Mock interview practice",
   description:
-    "Practice live mock interviews with honest, coaching-grade feedback. Voice or text. No account needed to start.",
+    "Short mock interview sessions with follow-ups and scored feedback. Voice or text.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

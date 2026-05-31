@@ -2,17 +2,20 @@
 
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import type { ReactNode } from "react";
 
 export function SelectionCard({
   selected,
   onClick,
-  emoji,
+  badge,
+  icon,
   title,
   subtitle,
 }: {
   selected: boolean;
   onClick: () => void;
-  emoji: string;
+  badge?: string;
+  icon?: ReactNode;
   title: string;
   subtitle?: string;
 }) {
@@ -32,9 +35,13 @@ export function SelectionCard({
           <Check className="h-4 w-4" />
         </span>
       )}
-      <span className="mb-2 block text-2xl" role="img" aria-hidden>
-        {emoji}
-      </span>
+      {(badge || icon) && (
+        <span className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-violet-100 text-violet-700">
+          {icon ?? (
+            <span className="text-xs font-bold tracking-tight">{badge}</span>
+          )}
+        </span>
+      )}
       <span className="block font-bold text-ink-900">{title}</span>
       {subtitle && <span className="mt-0.5 block text-sm text-ink-500">{subtitle}</span>}
     </button>

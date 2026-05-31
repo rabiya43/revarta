@@ -1,5 +1,4 @@
-import { streamText } from "@/lib/ai";
-import { interviewModel } from "@/lib/ai";
+import { streamText, interviewModel } from "@/lib/openai";
 import {
   buildFollowUpUserPrompt,
   buildInterviewerSystemPrompt,
@@ -46,10 +45,7 @@ function friendlyError(message: string, status = 500) {
 
 export async function POST(req: Request) {
   if (!process.env.OPENAI_API_KEY) {
-    return friendlyError(
-      "Interview coach is warming up. Please add your API key and try again.",
-      503
-    );
+    return friendlyError("Missing OPENAI_API_KEY in server env.", 503);
   }
 
   let parsed;
@@ -57,11 +53,11 @@ export async function POST(req: Request) {
     const json = await req.json();
     parsed = bodySchema.safeParse(json);
   } catch {
-    return friendlyError("Something went wrong. Please try again.", 400);
+    return friendlyError("Bad request.", 400);
   }
 
   if (!parsed.success) {
-    return friendlyError("Invalid request. Please refresh and try again.", 400);
+    return friendlyError("Bad request.", 400);
   }
 
   const { profile, question, history, candidateAnswer, isOpening, isLastQuestion } =
@@ -75,7 +71,7 @@ export async function POST(req: Request) {
   } else {
     const answer = sanitizeUserInput(candidateAnswer ?? "");
     if (!answer) {
-      return friendlyError("Please share your answer before continuing.", 400);
+      return friendlyError("Empty answer.", 400);
     }
     userPrompt = buildFollowUpUserPrompt(
       history as TurnMessage[],
@@ -96,9 +92,6 @@ export async function POST(req: Request) {
 
     return result.toDataStreamResponse();
   } catch {
-    return friendlyError(
-      "Our interviewer stepped out for a moment. Tap retry in a few seconds.",
-      503
-    );
+    return friendlyError("Interview request failed. Retry.", 503);
   }
 }

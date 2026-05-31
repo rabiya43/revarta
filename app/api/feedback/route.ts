@@ -1,4 +1,4 @@
-import { generateText, feedbackModel } from "@/lib/ai";
+import { generateText, feedbackModel } from "@/lib/openai";
 import { buildFeedbackSystemPrompt } from "@/lib/prompts";
 import { analyzeStar } from "@/lib/star";
 import { analyzeAnswerSpeech } from "@/lib/speech-metrics";
@@ -27,21 +27,18 @@ function friendlyError(message: string, status = 500) {
 
 export async function POST(req: Request) {
   if (!process.env.OPENAI_API_KEY) {
-    return friendlyError(
-      "Feedback coach is warming up. Please add your API key and try again.",
-      503
-    );
+    return friendlyError("Missing OPENAI_API_KEY in server env.", 503);
   }
 
   let parsed;
   try {
     parsed = bodySchema.safeParse(await req.json());
   } catch {
-    return friendlyError("Something went wrong. Please try again.", 400);
+    return friendlyError("Bad request.", 400);
   }
 
   if (!parsed.success) {
-    return friendlyError("Invalid request.", 400);
+    return friendlyError("Bad request.", 400);
   }
 
   const { profile, questionText, answer, durationSeconds } = parsed.data;
@@ -59,14 +56,14 @@ export async function POST(req: Request) {
       star: analyzeStar(sanitized),
       metrics: analyzeAnswerSpeech(sanitized, durationSeconds),
       rejectionRisks: [
-        "Answer is too short — interviewers will think you have no real experience to draw from.",
+        "Too short. Interviewers will assume you do not have a real example ready.",
       ],
       strengths: [],
       coachingTip:
-        "Aim for 60–90 seconds: set the scene, your role, what you did, and a quantified result.",
+        "Aim for 60-90 seconds: context, your role, what you did, and a result with a number if you can.",
       strongerVersionSnippet:
-        "At [Company], when [situation], I was responsible for [task]. I [specific action], which resulted in [metric].",
-      pacingNote: "Too short for a behavioral question.",
+        "At [company], when [situation], I owned [task]. I [action], which led to [metric].",
+      pacingNote: "Under a minute for a behavioral question.",
     } satisfies CoachingFeedback);
   }
 
@@ -82,7 +79,7 @@ Question: ${questionText}
 
 ${wrapUserContentForPrompt(sanitized)}
 
-Local analysis — STAR parts found: S=${star.hasSituation} T=${star.hasTask} A=${star.hasAction} R=${star.hasResult}. Duration: ${durationSeconds}s, WPM: ${metrics.wordsPerMinute}, Fillers: ${metrics.totalFillers}`,
+STAR flags: S=${star.hasSituation} T=${star.hasTask} A=${star.hasAction} R=${star.hasResult}. ${durationSeconds}s, ${metrics.wordsPerMinute} wpm, ${metrics.totalFillers} fillers.`,
       temperature: 0.3,
       maxTokens: 700,
     });
@@ -105,16 +102,13 @@ Local analysis — STAR parts found: S=${star.hasSituation} T=${star.hasTask} A=
       metrics,
       rejectionRisks: ai.rejectionRisks ?? [],
       strengths: ai.strengths ?? [],
-      coachingTip: ai.coachingTip ?? "Add a specific example with measurable impact.",
+      coachingTip: ai.coachingTip ?? "Add a concrete example with a measurable result.",
       strongerVersionSnippet: ai.strongerVersionSnippet ?? "",
       pacingNote: ai.pacingNote ?? "",
     };
 
     return Response.json(feedback);
   } catch {
-    return friendlyError(
-      "Couldn't analyze that answer right now. Tap retry — your answer is saved.",
-      503
-    );
+    return friendlyError("Feedback failed. Retry.", 503);
   }
 }

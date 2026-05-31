@@ -22,7 +22,7 @@ export function StarCoach({
   return (
     <div className="rounded-2xl border border-violet-100 bg-violet-50/50 p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h4 className="text-sm font-bold text-violet-700">STAR Method</h4>
+        <h4 className="text-sm font-bold text-violet-700">STAR</h4>
         <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-semibold text-violet-600">
           {star.score}/10
         </span>

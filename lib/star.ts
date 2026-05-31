@@ -28,8 +28,8 @@ export function analyzeStar(answer: string): StarAnalysis {
 }
 
 export const STAR_LABELS = {
-  situation: { letter: "S", label: "Situation", hint: "Set the scene — when, where, what was going on?" },
-  task: { letter: "T", label: "Task", hint: "What were YOU responsible for?" },
-  action: { letter: "A", label: "Action", hint: "What specific steps did you take?" },
-  result: { letter: "R", label: "Result", hint: "Quantify the outcome — numbers, %, time saved." },
+  situation: { letter: "S", label: "Situation", hint: "When and where was this? What was going on?" },
+  task: { letter: "T", label: "Task", hint: "What were you responsible for?" },
+  action: { letter: "A", label: "Action", hint: "What did you do, step by step?" },
+  result: { letter: "R", label: "Result", hint: "Numbers if you have them: %, time saved, revenue, users." },
 } as const;

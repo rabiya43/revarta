@@ -27,7 +27,7 @@ export function useSpeechRecognition() {
   const start = useCallback(() => {
     const Ctor = getSpeechRecognition();
     if (!Ctor) {
-      setError("Voice isn't supported in this browser — try Chrome or switch to text mode.");
+      setError("Voice input needs Chrome or Edge. Use text mode instead.");
       return;
     }
 
@@ -46,7 +46,7 @@ export function useSpeechRecognition() {
     };
 
     recognition.onerror = () => {
-      setError("Mic hiccup — tap to try again.");
+      setError("Mic error. Tap to try again.");
       setIsListening(false);
     };
 

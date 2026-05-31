@@ -51,12 +51,12 @@ export function getPacingStatus(durationSeconds: number): PacingStatus {
 export function pacingMessage(status: PacingStatus): string {
   switch (status) {
     case "too-short":
-      return "A bit short — behavioral answers usually need 60–90 seconds of real detail.";
+      return "Pretty short. Try for 60-90 seconds on behavioral questions.";
     case "ideal":
-      return "Nice pacing — you're in the sweet spot.";
+      return "Pacing looks good.";
     case "amber":
-      return "Getting long — start wrapping up with your result.";
+      return "Running long. Wrap up with the result.";
     case "too-long":
-      return "Over 3 minutes — interviewers lose focus. Trim setup, keep the impact.";
+      return "Over 3 minutes. Cut the setup, keep the outcome.";
   }
 }

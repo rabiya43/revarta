@@ -1,24 +1,24 @@
 import { Logo } from "@/components/Logo";
 import Link from "next/link";
-import { ArrowRight, MessageCircle, Mic, Target, Zap } from "lucide-react";
+import { ArrowRight, MessageCircle, Mic, Target } from "lucide-react";
 
 const features = [
   {
     icon: MessageCircle,
     title: "Live mock interviews",
-    desc: "AI reacts to what you actually said — not a static question list.",
+    desc: "Follow-ups based on what you said, not a fixed script.",
     color: "from-violet-500 to-violet-600",
   },
   {
     icon: Target,
-    title: "Honest coaching",
-    desc: "Know where you'd get rejected, plus one fix you can use today.",
+    title: "Straight feedback",
+    desc: "Scores plus what would hurt you in a real screen.",
     color: "from-coral-500 to-coral-600",
   },
   {
     icon: Mic,
-    title: "Voice-first practice",
-    desc: "Speak out loud. We track fillers, pacing, and STAR structure.",
+    title: "Voice practice",
+    desc: "Talk through answers. We count fillers and pacing.",
     color: "from-mint-500 to-mint-600",
   },
 ];
@@ -29,29 +29,25 @@ export default function HomePage() {
       <header className="mb-10 flex items-center justify-between">
         <Logo />
         <span className="rounded-full bg-mint-100 px-3 py-1 text-xs font-bold text-mint-600">
-          No signup to try ✨
+          No account needed
         </span>
       </header>
 
       <section className="mb-10 text-center sm:text-left">
-        <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-violet-600">
-          <Zap className="h-3.5 w-3.5" />
-          Stop rehearsing in your head
-        </p>
         <h1 className="mb-4 text-4xl font-black leading-tight tracking-tight sm:text-5xl">
-          Practice interviews that{" "}
-          <span className="gradient-text">actually talk back</span>
+          Mock interviews that{" "}
+          <span className="gradient-text">talk back</span>
         </h1>
         <p className="mb-8 text-lg text-ink-500 leading-relaxed">
-          Revarta is your AI interview coach — live follow-ups, honest scores, and
-          voice practice so you don&apos;t freeze when it counts.
+          Revarta runs a short practice loop: questions for your role, follow-ups,
+          and notes on structure and impact. Use your mic or type.
         </p>
         <Link href="/onboarding" className="btn-primary w-full sm:w-auto text-base">
-          Start free mock interview
+          Start a session
           <ArrowRight className="h-5 w-5" />
         </Link>
         <p className="mt-3 text-center text-xs text-ink-400 sm:text-left">
-          ~5 questions · 10 min · account optional after
+          About 5 questions, ~10 minutes. Sign up optional after.
         </p>
       </section>
 
@@ -70,12 +66,12 @@ export default function HomePage() {
       </section>
 
       <section className="glass-card p-6 text-center">
-        <p className="mb-1 text-sm font-bold text-violet-600">Roles we coach</p>
+        <p className="mb-1 text-sm font-bold text-violet-600">Roles</p>
         <p className="text-sm text-ink-500">
-          SWE · Product · Data · Design · Marketing · Finance
+          SWE, Product, Data, Design, Marketing, Finance
         </p>
         <p className="mt-2 text-xs text-ink-400">
-          Junior → Senior · Startup · Big Tech · Gov · Agency
+          Junior through senior. Startup, big tech, government, agency.
         </p>
       </section>
     </main>

@@ -16,24 +16,23 @@ import {
 } from "@/lib/types";
 import { saveProfile } from "@/lib/session-storage";
 import { ArrowLeft, ArrowRight, Keyboard, Mic } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const ROLE_EMOJI: Record<Role, string> = {
-  swe: "💻",
-  product: "📦",
-  data: "📊",
-  design: "🎨",
-  marketing: "📣",
-  finance: "💰",
+const ROLE_BADGE: Record<Role, string> = {
+  swe: "SW",
+  product: "PM",
+  data: "DA",
+  design: "UX",
+  marketing: "MK",
+  finance: "FN",
 };
 
-const COMPANY_EMOJI: Record<CompanyType, string> = {
-  startup: "🚀",
-  "big-tech": "🏢",
-  government: "🏛️",
-  agency: "🤝",
+const COMPANY_BADGE: Record<CompanyType, string> = {
+  startup: "ST",
+  "big-tech": "BT",
+  government: "GV",
+  agency: "AG",
 };
 
 const STEPS = ["role", "level", "company", "mode"] as const;
@@ -102,13 +101,13 @@ export default function OnboardingPage() {
 
       {step === "role" && (
         <section>
-          <h1 className="mb-2 text-2xl font-black">What&apos;s your role?</h1>
-          <p className="mb-6 text-ink-500">We&apos;ll pick questions that match your lane.</p>
+          <h1 className="mb-2 text-2xl font-black">Your role</h1>
+          <p className="mb-6 text-ink-500">Questions depend on this.</p>
           <div className="grid grid-cols-2 gap-3">
             {ROLES.map((r) => (
               <SelectionCard
                 key={r}
-                emoji={ROLE_EMOJI[r]}
+                badge={ROLE_BADGE[r]}
                 title={ROLE_LABELS[r]}
                 selected={role === r}
                 onClick={() => setRole(r)}
@@ -120,13 +119,13 @@ export default function OnboardingPage() {
 
       {step === "level" && (
         <section>
-          <h1 className="mb-2 text-2xl font-black">Experience level?</h1>
-          <p className="mb-6 text-ink-500">Questions scale with seniority.</p>
+          <h1 className="mb-2 text-2xl font-black">Experience</h1>
+          <p className="mb-6 text-ink-500">Rough years in role.</p>
           <div className="space-y-3">
             {SENIORITIES.map((s) => (
               <SelectionCard
                 key={s}
-                emoji={s === "junior" ? "🌱" : s === "mid" ? "⚡" : "👑"}
+                badge={s === "junior" ? "JR" : s === "mid" ? "MD" : "SR"}
                 title={SENIORITY_LABELS[s]}
                 selected={seniority === s}
                 onClick={() => setSeniority(s)}
@@ -138,13 +137,13 @@ export default function OnboardingPage() {
 
       {step === "company" && (
         <section>
-          <h1 className="mb-2 text-2xl font-black">Company type?</h1>
-          <p className="mb-6 text-ink-500">Interview style changes a lot by context.</p>
+          <h1 className="mb-2 text-2xl font-black">Company type</h1>
+          <p className="mb-6 text-ink-500">Where you are interviewing.</p>
           <div className="grid grid-cols-2 gap-3">
             {COMPANY_TYPES.map((c) => (
               <SelectionCard
                 key={c}
-                emoji={COMPANY_EMOJI[c]}
+                badge={COMPANY_BADGE[c]}
                 title={COMPANY_LABELS[c]}
                 selected={companyType === c}
                 onClick={() => setCompanyType(c)}
@@ -156,20 +155,20 @@ export default function OnboardingPage() {
 
       {step === "mode" && (
         <section>
-          <h1 className="mb-2 text-2xl font-black">How do you want to practice?</h1>
-          <p className="mb-6 text-ink-500">Voice is recommended — that&apos;s where people freeze.</p>
+          <h1 className="mb-2 text-2xl font-black">Input</h1>
+          <p className="mb-6 text-ink-500">Mic is closer to a real interview.</p>
           <div className="mb-4 grid grid-cols-2 gap-3">
             <SelectionCard
-              emoji="🎤"
-              title="Voice mode"
-              subtitle="Speak your answers"
+              icon={<Mic className="h-5 w-5" />}
+              title="Voice"
+              subtitle="Speak answers"
               selected={inputMode === "voice"}
               onClick={() => setInputMode("voice")}
             />
             <SelectionCard
-              emoji="⌨️"
-              title="Text mode"
-              subtitle="Type instead"
+              icon={<Keyboard className="h-5 w-5" />}
+              title="Text"
+              subtitle="Type answers"
               selected={inputMode === "text"}
               onClick={() => setInputMode("text")}
             />
@@ -182,20 +181,12 @@ export default function OnboardingPage() {
               className="mt-1 h-4 w-4 rounded accent-violet-500"
             />
             <div>
-              <span className="font-bold text-ink-900">STAR coach for beginners</span>
+              <span className="font-bold text-ink-900">STAR hints</span>
               <p className="text-sm text-ink-500">
-                Show hints for Situation → Task → Action → Result after each answer.
+                After each answer, show what was missing from Situation, Task, Action, Result.
               </p>
             </div>
           </label>
-          <div className="mt-4 flex items-center justify-center gap-4 text-xs text-ink-400">
-            <span className="flex items-center gap-1">
-              <Mic className="h-3 w-3" /> fillers tracked
-            </span>
-            <span className="flex items-center gap-1">
-              <Keyboard className="h-3 w-3" /> switch anytime
-            </span>
-          </div>
         </section>
       )}
 
@@ -203,7 +194,7 @@ export default function OnboardingPage() {
         <div className="mx-auto max-w-lg">
           {step === "mode" ? (
             <button type="button" onClick={startInterview} className="btn-primary w-full">
-              Let&apos;s go — start interview
+              Start interview
               <ArrowRight className="h-5 w-5" />
             </button>
           ) : (

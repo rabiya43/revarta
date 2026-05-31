@@ -3,7 +3,7 @@
 import type { CoachingFeedback } from "@/lib/types";
 import { ScoreBar } from "./ScoreBar";
 import { StarCoach } from "./StarCoach";
-import { AlertTriangle, Lightbulb, Sparkles, TrendingUp } from "lucide-react";
+import { AlertTriangle, Lightbulb, TrendingUp } from "lucide-react";
 
 export function FeedbackCard({
   feedback,
@@ -15,9 +15,9 @@ export function FeedbackCard({
   const { scores, metrics } = feedback;
 
   return (
-    <div className="glass-card animate-in fade-in space-y-5 p-5 sm:p-6">
+    <div className="glass-card space-y-5 p-5 sm:p-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-ink-900">Your coach&apos;s take</h3>
+        <h3 className="text-lg font-bold text-ink-900">Feedback</h3>
         <div className="rounded-2xl bg-gradient-to-br from-violet-500 to-coral-500 px-3 py-1.5 text-lg font-black text-white shadow-md">
           {scores.overall}/10
         </div>
@@ -25,8 +25,8 @@ export function FeedbackCard({
 
       <div className="space-y-3">
         <ScoreBar label="Structure" score={scores.structure} />
-        <ScoreBar label="Specificity (real example?)" score={scores.specificity} />
-        <ScoreBar label="Impact clarity" score={scores.impactClarity} />
+        <ScoreBar label="Specificity" score={scores.specificity} />
+        <ScoreBar label="Impact" score={scores.impactClarity} />
         <ScoreBar label="Conciseness" score={scores.conciseness} />
       </div>
 
@@ -35,14 +35,14 @@ export function FeedbackCard({
       {(metrics.totalFillers > 0 || metrics.wordsPerMinute > 0) && (
         <div className="flex flex-wrap gap-2 text-xs">
           <span className="rounded-full bg-ink-100 px-3 py-1 font-medium text-ink-600">
-            {metrics.wordsPerMinute} WPM
+            {metrics.wordsPerMinute} wpm
           </span>
           {metrics.totalFillers > 0 && (
             <span className="rounded-full bg-coral-100 px-3 py-1 font-medium text-coral-600">
               {metrics.totalFillers} filler{metrics.totalFillers > 1 ? "s" : ""}
               {Object.keys(metrics.fillerWords).length > 0 &&
                 ` (${Object.entries(metrics.fillerWords)
-                  .map(([w, c]) => `"${w}"×${c}`)
+                  .map(([w, c]) => `${w} x${c}`)
                   .join(", ")})`}
             </span>
           )}
@@ -56,12 +56,12 @@ export function FeedbackCard({
         <div className="rounded-2xl border border-coral-200 bg-coral-50 p-4">
           <div className="mb-2 flex items-center gap-2 text-coral-700">
             <AlertTriangle className="h-4 w-4" />
-            <span className="text-sm font-bold">Where you&apos;d get pushed back</span>
+            <span className="text-sm font-bold">Likely pushback</span>
           </div>
           <ul className="space-y-1.5">
             {feedback.rejectionRisks.map((risk, i) => (
               <li key={i} className="text-sm text-coral-800">
-                • {risk}
+                {risk}
               </li>
             ))}
           </ul>
@@ -72,32 +72,29 @@ export function FeedbackCard({
         <div className="rounded-2xl border border-mint-200 bg-mint-50 p-4">
           <div className="mb-2 flex items-center gap-2 text-mint-700">
             <TrendingUp className="h-4 w-4" />
-            <span className="text-sm font-bold">What worked</span>
+            <span className="text-sm font-bold">Worked</span>
           </div>
           <ul className="space-y-1">
             {feedback.strengths.map((s, i) => (
               <li key={i} className="text-sm text-mint-800">
-                • {s}
+                {s}
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      <div className="rounded-2xl border-2 border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4">
+      <div className="rounded-2xl border-2 border-violet-200 bg-violet-50/80 p-4">
         <div className="mb-2 flex items-center gap-2 text-violet-700">
           <Lightbulb className="h-5 w-5" />
-          <span className="font-bold">#1 thing to fix</span>
+          <span className="font-bold">Main fix</span>
         </div>
         <p className="text-sm leading-relaxed text-ink-700">{feedback.coachingTip}</p>
       </div>
 
       {feedback.strongerVersionSnippet && (
         <div className="rounded-2xl bg-ink-100/60 p-4">
-          <div className="mb-2 flex items-center gap-2 text-ink-500">
-            <Sparkles className="h-4 w-4" />
-            <span className="text-xs font-bold uppercase tracking-wide">Stronger version</span>
-          </div>
+          <p className="mb-2 text-xs font-bold text-ink-500">Try saying</p>
           <p className="text-sm italic leading-relaxed text-ink-700">
             &ldquo;{feedback.strongerVersionSnippet}&rdquo;
           </p>

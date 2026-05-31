@@ -19,7 +19,7 @@ export function TextInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        placeholder="Type your answer here — pretend you're speaking to a real interviewer."
+        placeholder="Type your answer like you would say it out loud."
         rows={6}
         className="w-full resize-none rounded-2xl border-2 border-ink-100 bg-white p-4 text-sm leading-relaxed text-ink-700 placeholder:text-ink-300 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200 disabled:opacity-50"
       />
@@ -30,7 +30,7 @@ export function TextInput({
         disabled={disabled}
       >
         <Mic className="h-4 w-4" />
-        Switch to voice mode
+        Use voice instead
       </button>
     </div>
   );

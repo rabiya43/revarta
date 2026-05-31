@@ -1,0 +1,18 @@
+{
+  "name": "Revarta",
+  "short_name": "Revarta",
+  "description": "AI mock interview coach with honest feedback",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f7fc",
+  "theme_color": "#7c4dff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

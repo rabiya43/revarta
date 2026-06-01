@@ -1,6 +1,6 @@
 "use client";
 
-import { readDataStream } from "ai";
+import { processDataStream } from "ai";
 import type { OnboardingProfile, Question, TurnMessage } from "@/lib/types";
 import { useCallback, useState } from "react";
 
@@ -38,12 +38,13 @@ export function useInterviewerStream() {
       if (!res.body) throw new Error("No response stream");
 
       let full = "";
-      for await (const chunk of readDataStream(res.body)) {
-        if (chunk.type === "text-delta") {
-          full += chunk.textDelta;
+      await processDataStream({
+        stream: res.body,
+        onTextPart(value) {
+          full += value;
           setText(full);
-        }
-      }
+        },
+      });
 
       return full;
     } catch (e) {

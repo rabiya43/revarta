@@ -81,7 +81,7 @@ export default function HomePage() {
         <section id="how" className="border-t border-ink-100 bg-white px-4 py-16 sm:px-6">
           <div className="mx-auto max-w-6xl">
             <h2 className="mb-10 text-center text-3xl font-black sm:text-left">How it works</h2>
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {steps.map((step, i) => (
                 <article key={step.title} className="glass-card p-6">
                   <span className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-500 text-sm font-bold text-white">

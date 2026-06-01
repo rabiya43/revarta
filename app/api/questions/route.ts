@@ -1,4 +1,4 @@
-import { selectQuestions } from "@/lib/question-banks";
+import { selectQuestions } from "@revarta/shared";
 import { z } from "zod";
 
 const querySchema = z.object({

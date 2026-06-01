@@ -7,14 +7,8 @@ import { FeedbackSkeleton, InterviewerSkeleton } from "@/components/Skeleton";
 import { TextInput } from "@/components/TextInput";
 import { VoiceInput } from "@/components/VoiceInput";
 import { useInterviewerStream } from "@/hooks/useInterviewerStream";
-import type {
-  CoachingFeedback,
-  InterviewSession,
-  OnboardingProfile,
-  Question,
-  TurnMessage,
-} from "@/lib/types";
 import { CompanyBriefCard } from "@/components/CompanyBriefCard";
+import { saveSessionToHistory } from "@/lib/progress-storage";
 import {
   clearSession,
   createSession,
@@ -24,8 +18,14 @@ import {
   loadTailorQuestions,
   saveSession,
 } from "@/lib/session-storage";
-import { saveSessionToHistory } from "@/lib/progress-storage";
-import type { CompanyBrief } from "@/lib/types";
+import type {
+  CoachingFeedback,
+  CompanyBrief,
+  InterviewSession,
+  OnboardingProfile,
+  Question,
+  TurnMessage,
+} from "@/lib/types";
 import { RefreshCw, Send, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -226,25 +226,27 @@ export default function InterviewPage() {
   async function continueAfterFeedback() {
     if (!session || !profile) return;
 
+    const current = loadSession() ?? session;
+
     const maxFollowUps = 1;
     if (followUpCount < maxFollowUps && !isLastQuestion) {
       setFollowUpCount((c) => c + 1);
       setAnswer("");
       setFeedback(null);
       try {
-        await askInterviewer(session, questions, {
+        await askInterviewer(current, questions, {
           isOpening: false,
-          candidateAnswer: session.turns.filter((t) => t.role === "candidate").at(-1)?.content,
-          history: session.turns,
+          candidateAnswer: current.turns.filter((t) => t.role === "candidate").at(-1)?.content,
+          history: current.turns,
         });
       } catch {}
       return;
     }
 
-    const nextIndex = session.currentQuestionIndex + 1;
+    const nextIndex = current.currentQuestionIndex + 1;
     if (nextIndex < questions.length) {
       const nextSession: InterviewSession = {
-        ...session,
+        ...current,
         currentQuestionIndex: nextIndex,
         updatedAt: Date.now(),
       };
@@ -256,7 +258,11 @@ export default function InterviewPage() {
         await askInterviewer(nextSession, questions, { isOpening: true });
       } catch {}
     } else {
-      saveSessionToHistory(session);
+      const saved = loadSession() ?? current;
+      if (feedback && !saved.feedbackHistory.some((f) => f.coachingTip === feedback.coachingTip)) {
+        saved.feedbackHistory = [...saved.feedbackHistory, feedback];
+      }
+      saveSessionToHistory(saved);
       clearSession();
       router.push("/complete");
     }

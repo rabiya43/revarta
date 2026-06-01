@@ -1,4 +1,5 @@
-/node_modules
+node_modules/
+**/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -28,3 +29,13 @@ yarn-error.log*
 .idea
 .vscode/*
 !.vscode/extensions.json
+
+.expo/
+apps/mobile/.expo/
+dist/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+play-store-key.json

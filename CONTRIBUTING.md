@@ -1,13 +1,15 @@
 # Contributing
 
-Branch off `main`:
+Branch off `main`. Name branches like a person would:
 
-- `feature/name` for new stuff
-- `fix/name` for bugs
-- `chore/name` for tooling
+- `mobile-and-website`
+- `resume-upload`
+- `fix-timer-bug`
 
-One feature per PR when you can. Run `npm run typecheck` before opening.
+Not `chore/humanize-copy` or `feature/implement-x`.
 
-Do not commit `.env` or keys.
+One topic per branch. Run `npm install` from the repo root. Web: `npm run dev`. Mobile: `npm run mobile`.
 
-User input that hits the model should go through `sanitizeUserInput()` first.
+Do not commit `.env` files or API keys.
+
+User text that hits the model should use `sanitizeUserInput()` from shared.

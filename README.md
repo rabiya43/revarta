@@ -1,32 +1,56 @@
 # Revarta
 
-Mock interview practice app. Pick your role, run a short session, get scores and notes on your answers. Voice or typing.
+Mock interview practice on the web and on iOS/Android. Voice or text, follow-up questions, scored feedback, optional resume + job-description tailoring.
 
-## Setup
+## Repo layout
 
-Needs Node 20+ and an OpenAI key.
+| Path | What |
+|------|------|
+| `/` | Next.js website + API |
+| `packages/shared` | Types and question logic shared with mobile |
+| `apps/mobile` | Expo app (App Store / Play Store) |
+| `docs/app-store.md` | How to build and submit native apps |
+
+## Web
 
 ```bash
 npm install
 cp .env.example .env.local
-# put OPENAI_API_KEY in .env.local
+# OPENAI_API_KEY=...
 npm run dev
 ```
 
-App runs at http://localhost:3000
+Site: http://localhost:3000  
+Practice flow: `/onboarding` then `/prepare` then `/interview`
 
-## Env
+## Mobile
+
+```bash
+cp apps/mobile/.env.example apps/mobile/.env
+# EXPO_PUBLIC_API_URL=http://YOUR_LAN_IP:3000
+npm run mobile
+```
+
+Store builds: see `docs/app-store.md`.
+
+## Env (web)
 
 | Name | Required |
 |------|----------|
 | OPENAI_API_KEY | yes |
-| OPENAI_INTERVIEW_MODEL | no (default gpt-4o-mini) |
-| OPENAI_FEEDBACK_MODEL | no (default gpt-4o-mini) |
+| OPENAI_INTERVIEW_MODEL | no |
+| OPENAI_FEEDBACK_MODEL | no |
 
 ## Branches
 
-Work on `feature/...` or `fix/...` off `main`. See CONTRIBUTING.md.
+Use plain names, one topic each. Examples:
+
+- `mobile-and-website`
+- `resume-upload`
+- `company-brief`
+
+Avoid `chore/humanize-copy` style names.
 
 ## Stack
 
-Next.js 15, Tailwind 4, OpenAI API, Web Speech API for mic input.
+Next.js 15, Expo 52, Tailwind 4, OpenAI API, shared TypeScript package.

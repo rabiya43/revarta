@@ -1,8 +1,9 @@
-import type { InterviewSession, OnboardingProfile } from "./types";
+import type { InterviewSession, OnboardingProfile, Question } from "./types";
 import { generateId } from "./utils";
 
 const SESSION_KEY = "revarta_active_session";
 const PROFILE_KEY = "revarta_profile";
+const TAILOR_QUESTIONS_KEY = "revarta_tailor_questions";
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
 
 export function saveProfile(profile: OnboardingProfile): void {
@@ -47,6 +48,22 @@ export function loadSession(): InterviewSession | null {
 export function clearSession(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(TAILOR_QUESTIONS_KEY);
+}
+
+export function saveTailorQuestions(questions: Question[]): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(TAILOR_QUESTIONS_KEY, JSON.stringify(questions));
+}
+
+export function loadTailorQuestions(): Question[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(TAILOR_QUESTIONS_KEY);
+    return raw ? (JSON.parse(raw) as Question[]) : null;
+  } catch {
+    return null;
+  }
 }
 
 export function createSession(

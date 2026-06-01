@@ -1,4 +1,4 @@
-import { streamText, interviewModel } from "@/lib/openai";
+import { generateText, streamText, interviewModel } from "@/lib/openai";
 import {
   buildFollowUpUserPrompt,
   buildInterviewerSystemPrompt,
@@ -81,7 +81,20 @@ export async function POST(req: Request) {
     );
   }
 
+  const sync = new URL(req.url).searchParams.get("sync") === "1";
+
   try {
+    if (sync) {
+      const { text } = await generateText({
+        model: interviewModel,
+        system,
+        prompt: userPrompt,
+        temperature: 0.7,
+        maxTokens: 400,
+      });
+      return Response.json({ text });
+    }
+
     const result = streamText({
       model: interviewModel,
       system,

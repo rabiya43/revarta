@@ -8,6 +8,31 @@ import { useState } from "react";
 export default function CompletePage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  async function notifyMe() {
+    if (!email.includes("@")) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "web-complete" }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSubmitError(data.error ?? "Something went wrong.");
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Could not reach the server. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center px-4 py-12 text-center">
@@ -33,13 +58,16 @@ export default function CompletePage() {
             placeholder="you@email.com"
             className="mb-3 w-full rounded-xl border-2 border-ink-100 px-4 py-3 text-sm focus:border-violet-400 focus:outline-none"
           />
+          {submitError ? (
+            <p className="mb-3 text-sm text-coral-600">{submitError}</p>
+          ) : null}
           <button
             type="button"
-            onClick={() => email.includes("@") && setSubmitted(true)}
+            onClick={notifyMe}
             className="btn-primary w-full text-sm"
-            disabled={!email.includes("@")}
+            disabled={!email.includes("@") || submitting}
           >
-            Notify me
+            {submitting ? "Saving…" : "Notify me"}
           </button>
           <Link
             href="/onboarding"

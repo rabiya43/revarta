@@ -1,16 +1,43 @@
 import { colors } from "@/constants/theme";
+import { joinWaitlist } from "@/lib/api";
 import { loadSessionHistory } from "@/lib/storage";
 import { ROLE_LABELS, type SessionRecord } from "@revarta/shared";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function ProgressScreen() {
   const [history, setHistory] = useState<SessionRecord[]>([]);
+  const [email, setEmail] = useState("");
+  const [waitlistDone, setWaitlistDone] = useState(false);
+  const [waitlistBusy, setWaitlistBusy] = useState(false);
+  const [waitlistError, setWaitlistError] = useState<string | null>(null);
 
   useEffect(() => {
     loadSessionHistory().then(setHistory);
   }, []);
+
+  async function saveWaitlist() {
+    if (!email.includes("@")) return;
+    setWaitlistBusy(true);
+    setWaitlistError(null);
+    try {
+      await joinWaitlist(email, "mobile-progress");
+      setWaitlistDone(true);
+    } catch (e) {
+      setWaitlistError(e instanceof Error ? e.message : "Signup failed");
+    } finally {
+      setWaitlistBusy(false);
+    }
+  }
 
   const avg =
     history.length > 0
@@ -41,6 +68,36 @@ export default function ProgressScreen() {
           <Text style={styles.secondaryText}>Practice drills</Text>
         </Pressable>
       </Link>
+
+      <View style={styles.waitlist}>
+        <Text style={styles.waitlistTitle}>Cloud sync (soon)</Text>
+        {waitlistDone ? (
+          <Text style={styles.waitlistOk}>We will email you when accounts are ready.</Text>
+        ) : (
+          <>
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder="you@email.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              style={styles.input}
+            />
+            {waitlistError ? <Text style={styles.waitlistErr}>{waitlistError}</Text> : null}
+            <Pressable
+              style={[styles.primary, waitlistBusy && styles.disabled]}
+              onPress={saveWaitlist}
+              disabled={!email.includes("@") || waitlistBusy}
+            >
+              {waitlistBusy ? (
+                <ActivityIndicator color={colors.white} />
+              ) : (
+                <Text style={styles.primaryText}>Notify me</Text>
+              )}
+            </Pressable>
+          </>
+        )}
+      </View>
     </ScrollView>
   );
 }
@@ -84,4 +141,32 @@ const styles = StyleSheet.create({
   score: { fontWeight: "800", color: colors.violet500 },
   secondary: { marginTop: 20, padding: 14, alignItems: "center" },
   secondaryText: { color: colors.violet500, fontWeight: "600" },
+  waitlist: {
+    marginTop: 28,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.ink100,
+  },
+  waitlistTitle: { fontWeight: "700", marginBottom: 10, color: colors.ink900 },
+  waitlistOk: { fontSize: 14, color: colors.ink500 },
+  waitlistErr: { fontSize: 13, color: "#e85d4c", marginBottom: 8 },
+  input: {
+    borderWidth: 2,
+    borderColor: colors.ink100,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 10,
+    fontSize: 15,
+  },
+  primary: {
+    backgroundColor: colors.violet500,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  primaryText: { color: colors.white, fontWeight: "700" },
+  disabled: { opacity: 0.6 },
 });

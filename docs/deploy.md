@@ -7,6 +7,7 @@
    - `OPENAI_API_KEY`
    - optional: `OPENAI_INTERVIEW_MODEL`, `OPENAI_FEEDBACK_MODEL`
    - optional: `ALLOWED_ORIGINS` for production mobile (your Vercel URL + Expo dev URLs)
+   - optional: `WAITLIST_WEBHOOK_URL` to forward signup emails (Slack, Zapier, Formspree, etc.)
 5. Deploy. Note the URL, e.g. `https://revarta.vercel.app`
 
 ## Mobile after deploy

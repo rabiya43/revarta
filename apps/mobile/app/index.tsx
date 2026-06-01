@@ -16,6 +16,11 @@ export default function HomeScreen() {
           <Text style={styles.primaryText}>Start</Text>
         </Pressable>
       </Link>
+      <Link href="/progress" asChild>
+        <Pressable style={styles.secondary}>
+          <Text style={styles.secondaryText}>Progress</Text>
+        </Pressable>
+      </Link>
       <Text style={styles.hint}>Point EXPO_PUBLIC_API_URL at your deployed web API.</Text>
     </View>
   );
@@ -33,5 +38,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   primaryText: { color: colors.white, fontWeight: "700", fontSize: 16 },
+  secondary: {
+    marginTop: 12,
+    paddingVertical: 14,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: colors.violet500,
+    alignItems: "center",
+  },
+  secondaryText: { color: colors.violet500, fontWeight: "700" },
   hint: { marginTop: 20, fontSize: 12, color: colors.ink500, textAlign: "center" },
 });

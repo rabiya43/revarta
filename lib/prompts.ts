@@ -75,3 +75,23 @@ Return JSON only: { "questions": [ { "id": "t1", "text": "...", "category": "beh
 
 Questions must reference their real background and the JD. Mix behavioral and role-specific.`;
 }
+
+export function buildCompanyBriefPrompt(
+  companyName: string,
+  profile: OnboardingProfile
+): string {
+  return `Research brief for a candidate interviewing at "${companyName}".
+
+Their target role: ${ROLE_LABELS[profile.role]}, ${SENIORITY_LABELS[profile.seniority]}, company type context: ${COMPANY_LABELS[profile.companyType]}.
+
+Use your knowledge. Be factual. If unsure on news, say what to verify on the company careers page or LinkedIn.
+
+Return JSON only:
+{
+  "overview": "what the company does, products, customers (2-4 sentences)",
+  "culture": "how they present culture and values",
+  "recentNews": "recent moves, launches, or hiring themes (or note if unknown)",
+  "interviewStyle": "what interview loops here usually feel like for this role",
+  "commonQuestions": ["5 questions often asked there"]
+}`;
+}

@@ -1,9 +1,15 @@
-import type { InterviewSession, OnboardingProfile, Question } from "./types";
+import type {
+  CompanyBrief,
+  InterviewSession,
+  OnboardingProfile,
+  Question,
+} from "./types";
 import { generateId } from "./utils";
 
 const SESSION_KEY = "revarta_active_session";
 const PROFILE_KEY = "revarta_profile";
 const TAILOR_QUESTIONS_KEY = "revarta_tailor_questions";
+const COMPANY_BRIEF_KEY = "revarta_company_brief";
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
 
 export function saveProfile(profile: OnboardingProfile): void {
@@ -61,6 +67,21 @@ export function loadTailorQuestions(): Question[] | null {
   try {
     const raw = localStorage.getItem(TAILOR_QUESTIONS_KEY);
     return raw ? (JSON.parse(raw) as Question[]) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveCompanyBrief(brief: CompanyBrief): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(COMPANY_BRIEF_KEY, JSON.stringify(brief));
+}
+
+export function loadCompanyBrief(): CompanyBrief | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(COMPANY_BRIEF_KEY);
+    return raw ? (JSON.parse(raw) as CompanyBrief) : null;
   } catch {
     return null;
   }

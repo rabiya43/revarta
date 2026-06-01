@@ -14,14 +14,18 @@ import type {
   Question,
   TurnMessage,
 } from "@/lib/types";
+import { CompanyBriefCard } from "@/components/CompanyBriefCard";
 import {
   clearSession,
   createSession,
+  loadCompanyBrief,
   loadProfile,
   loadSession,
   loadTailorQuestions,
   saveSession,
 } from "@/lib/session-storage";
+import { saveSessionToHistory } from "@/lib/progress-storage";
+import type { CompanyBrief } from "@/lib/types";
 import { RefreshCw, Send, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -45,6 +49,7 @@ export default function InterviewPage() {
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
   const [followUpCount, setFollowUpCount] = useState(0);
+  const [companyBrief, setCompanyBrief] = useState<CompanyBrief | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const initRef = useRef(false);
 
@@ -123,6 +128,7 @@ export default function InterviewPage() {
     }
     setProfile(p);
     setInputMode(p.inputMode);
+    setCompanyBrief(loadCompanyBrief() ?? p.companyBrief ?? null);
 
     const existing = loadSession();
     if (existing && existing.profile.role === p.role) {
@@ -250,6 +256,7 @@ export default function InterviewPage() {
         await askInterviewer(nextSession, questions, { isOpening: true });
       } catch {}
     } else {
+      saveSessionToHistory(session);
       clearSession();
       router.push("/complete");
     }
@@ -278,6 +285,8 @@ export default function InterviewPage() {
           Q{(session?.currentQuestionIndex ?? 0) + 1}/{questions.length || 5}
         </span>
       </header>
+
+      {companyBrief && <CompanyBriefCard brief={companyBrief} compact />}
 
       {(phase === "interviewer" || phase === "loading") && (
         <>

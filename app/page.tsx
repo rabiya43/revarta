@@ -17,7 +17,11 @@ const steps = [
   },
   {
     title: "Paste resume + JD",
-    text: "Optional but strong: we generate questions from your background and the job post.",
+    text: "Optional: questions built from your background and the job post.",
+  },
+  {
+    title: "Research the company",
+    text: "One-page brief on culture, news, and what interviews there are like.",
   },
   {
     title: "Run the loop",

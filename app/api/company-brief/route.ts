@@ -1,20 +1,16 @@
 import { generateText, feedbackModel } from "@/lib/openai";
+import { profileBodySchema, profileFromBody } from "@/lib/profile-schema";
 import { buildCompanyBriefPrompt } from "@/lib/prompts";
 import { sanitizeUserInput } from "@/lib/sanitize";
 import type { CompanyBrief, OnboardingProfile } from "@/lib/types";
+import { normalizeProfile } from "@revarta/shared";
 import { z } from "zod";
 
 export const maxDuration = 45;
 
 const bodySchema = z.object({
   companyName: z.string().min(2).max(120),
-  profile: z.object({
-    role: z.enum(["swe", "product", "data", "design", "marketing", "finance"]),
-    seniority: z.enum(["junior", "mid", "senior"]),
-    companyType: z.enum(["startup", "big-tech", "government", "agency"]),
-    inputMode: z.enum(["voice", "text"]),
-    useStarScaffold: z.boolean(),
-  }),
+  profile: z.unknown(),
 });
 
 export async function POST(req: Request) {
@@ -28,7 +24,16 @@ export async function POST(req: Request) {
   }
 
   const companyName = sanitizeUserInput(parsed.data.companyName);
-  const profile = parsed.data.profile as OnboardingProfile;
+  const profileParsed = profileBodySchema.safeParse(parsed.data.profile);
+  const profile = (
+    profileParsed.success
+      ? profileFromBody(profileParsed.data)
+      : normalizeProfile(parsed.data.profile)
+  ) as OnboardingProfile | null;
+
+  if (!profile) {
+    return Response.json({ error: "Profile outdated. Redo onboarding." }, { status: 400 });
+  }
 
   try {
     const { text } = await generateText({

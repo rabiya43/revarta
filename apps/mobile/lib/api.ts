@@ -42,6 +42,23 @@ export async function fetchCompanyBrief(
   return data.brief;
 }
 
+export async function extractDocumentText(uri: string, name: string, mimeType?: string): Promise<string> {
+  const form = new FormData();
+  form.append("file", {
+    uri,
+    name,
+    type: mimeType ?? "application/octet-stream",
+  } as unknown as Blob);
+
+  const res = await fetch(`${getApiBase()}/api/extract-text`, {
+    method: "POST",
+    body: form,
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error ?? "Could not read file");
+  return data.text as string;
+}
+
 export async function tailorQuestions(
   profile: OnboardingProfile,
   resumeText: string,

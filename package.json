@@ -13,7 +13,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "mobile": "npm run start -w @revarta/mobile"
+    "mobile": "npm run start -w @revarta/mobile",
+    "mobile:icons": "node scripts/create-mobile-icons.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.22",

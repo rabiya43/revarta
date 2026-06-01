@@ -34,6 +34,10 @@ npm run mobile
 
 Store builds: see `docs/app-store.md`.
 
+Deploy web + API: see `docs/deploy.md`. After deploy, set `EXPO_PUBLIC_API_URL` in `apps/mobile/.env`.
+
+Generate Expo icon PNGs once: `npm run mobile:icons`
+
 ## Env (web)
 
 | Name | Required |

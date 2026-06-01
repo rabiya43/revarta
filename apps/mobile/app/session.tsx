@@ -81,19 +81,21 @@ export default function SessionScreen() {
 
     const next = qIndex + 1;
     if (next >= questions.length) {
-      const profile = await loadProfile();
-      if (profile && feedbackLog.length > 0) {
+      const log =
+        feedback && feedbackLog[feedbackLog.length - 1] !== feedback
+          ? [...feedbackLog, feedback]
+          : feedbackLog;
+
+      if (profile && log.length > 0) {
         const avg = (key: keyof CoachingFeedback["scores"]) =>
-          Math.round(
-            (feedbackLog.reduce((s, f) => s + f.scores[key], 0) / feedbackLog.length) * 10
-          ) / 10;
+          Math.round((log.reduce((s, f) => s + f.scores[key], 0) / log.length) * 10) / 10;
         const record: SessionRecord = {
           id: String(Date.now()),
           completedAt: Date.now(),
           role: profile.role,
           seniority: profile.seniority,
           companyType: profile.companyType,
-          questionsAnswered: feedbackLog.length,
+          questionsAnswered: log.length,
           avgOverall: avg("overall"),
           avgStructure: avg("structure"),
           avgSpecificity: avg("specificity"),

@@ -82,6 +82,16 @@ export type InterviewStreamParams = {
   isLastQuestion?: boolean;
 };
 
+export async function joinWaitlist(email: string, source = "mobile"): Promise<void> {
+  const res = await fetch(`${getApiBase()}/api/waitlist`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, source }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error ?? "Signup failed");
+}
+
 export async function streamInterviewText(params: InterviewStreamParams): Promise<string> {
   const res = await fetch(`${getApiBase()}/api/interview?sync=1`, {
     method: "POST",

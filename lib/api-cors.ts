@@ -12,9 +12,14 @@ export function corsHeaders(request: Request): HeadersInit {
 
   if (!origin) return headers;
 
+  const deployOrigin = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : null;
+
   const allowed =
     ALLOWED_ORIGINS.length === 0 ||
     ALLOWED_ORIGINS.includes(origin) ||
+    (deployOrigin !== null && origin === deployOrigin) ||
     origin.startsWith("exp://") ||
     origin.startsWith("http://localhost") ||
     origin.startsWith("http://127.0.0.1");

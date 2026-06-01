@@ -1,5 +1,11 @@
 import Constants from "expo-constants";
-import type { CoachingFeedback, OnboardingProfile, Question, TurnMessage } from "@revarta/shared";
+import type {
+  CoachingFeedback,
+  CompanyBrief,
+  OnboardingProfile,
+  Question,
+  TurnMessage,
+} from "@revarta/shared";
 
 const base =
   process.env.EXPO_PUBLIC_API_URL ??
@@ -20,6 +26,20 @@ export async function fetchQuestions(profile: OnboardingProfile): Promise<Questi
   const res = await fetch(`${getApiBase()}/api/questions?${params}`);
   const data = await res.json();
   return data.questions ?? [];
+}
+
+export async function fetchCompanyBrief(
+  profile: OnboardingProfile,
+  companyName: string
+): Promise<CompanyBrief> {
+  const res = await fetch(`${getApiBase()}/api/company-brief`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ profile, companyName }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error ?? "Brief failed");
+  return data.brief;
 }
 
 export async function tailorQuestions(

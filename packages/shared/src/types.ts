@@ -28,6 +28,16 @@ export interface TailorContext {
   generatedAt: number;
 }
 
+export interface CompanyBrief {
+  companyName: string;
+  overview: string;
+  culture: string;
+  recentNews: string;
+  interviewStyle: string;
+  commonQuestions: string[];
+  generatedAt: number;
+}
+
 export interface OnboardingProfile {
   role: Role;
   seniority: Seniority;
@@ -35,6 +45,20 @@ export interface OnboardingProfile {
   inputMode: InputMode;
   useStarScaffold: boolean;
   tailor?: TailorContext;
+  companyBrief?: CompanyBrief;
+}
+
+export interface SessionRecord {
+  id: string;
+  completedAt: number;
+  role: Role;
+  seniority: Seniority;
+  companyType: CompanyType;
+  questionsAnswered: number;
+  avgOverall: number;
+  avgStructure: number;
+  avgSpecificity: number;
+  avgImpact: number;
 }
 
 export interface Question {

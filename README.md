@@ -21,7 +21,8 @@ npm run dev
 ```
 
 Site: http://localhost:3000  
-Practice flow: `/onboarding` then `/prepare` then `/interview`
+Practice flow: `/onboarding` → `/prepare` → `/research` → `/interview`  
+Also: `/progress` (history), `/drills` (no timer)
 
 ## Mobile
 

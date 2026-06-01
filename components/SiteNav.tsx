@@ -15,6 +15,9 @@ export function SiteNav() {
           <Link href="/#apps" className="hidden text-sm font-medium text-ink-500 hover:text-ink-900 sm:inline">
             Apps
           </Link>
+          <Link href="/progress" className="hidden text-sm font-medium text-ink-500 hover:text-ink-900 sm:inline">
+            Progress
+          </Link>
           <Link href="/onboarding" className="btn-primary py-2.5 text-sm">
             Try it free
           </Link>

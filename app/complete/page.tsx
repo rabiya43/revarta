@@ -23,8 +23,8 @@ export default function CompletePage() {
         <div className="glass-card w-full max-w-sm p-6 text-left">
           <p className="mb-1 font-bold text-ink-900">Save progress (soon)</p>
           <p className="mb-4 text-sm text-ink-500">
-            History and charts are not built yet. Leave your email if you want a
-            heads up when that ships.
+            Your session is saved locally. View scores on the progress page. Leave
+            email if you want cloud sync later.
           </p>
           <input
             type="email"
@@ -54,10 +54,14 @@ export default function CompletePage() {
         </p>
       )}
 
-      <Link href="/onboarding" className="btn-secondary mt-6">
-        New session
-        <ArrowRight className="h-4 w-4" />
-      </Link>
+      <div className="mt-6 flex w-full max-w-sm flex-col gap-2">
+        <Link href="/progress" className="btn-primary w-full text-center">
+          View progress
+        </Link>
+        <Link href="/onboarding" className="btn-secondary w-full text-center">
+          New session
+        </Link>
+      </div>
     </main>
   );
 }

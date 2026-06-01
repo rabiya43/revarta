@@ -1,7 +1,7 @@
 import { colors } from "@/constants/theme";
 import { fetchFeedback, fetchQuestions, streamInterviewText } from "@/lib/api";
-import { loadProfile, loadTailorQuestions } from "@/lib/storage";
-import type { CoachingFeedback, Question, TurnMessage } from "@revarta/shared";
+import { appendSessionRecord, loadProfile, loadTailorQuestions } from "@/lib/storage";
+import type { CoachingFeedback, Question, SessionRecord, TurnMessage } from "@revarta/shared";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -24,6 +24,7 @@ export default function SessionScreen() {
   const [phase, setPhase] = useState<"load" | "ask" | "feedback">("load");
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<TurnMessage[]>([]);
+  const [feedbackLog, setFeedbackLog] = useState<CoachingFeedback[]>([]);
   const started = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function SessionScreen() {
         duration
       );
       setFeedback(fb);
+      setFeedbackLog((log) => [...log, fb]);
       setPhase("feedback");
     } finally {
       setLoading(false);
@@ -79,7 +81,27 @@ export default function SessionScreen() {
 
     const next = qIndex + 1;
     if (next >= questions.length) {
-      router.replace("/");
+      const profile = await loadProfile();
+      if (profile && feedbackLog.length > 0) {
+        const avg = (key: keyof CoachingFeedback["scores"]) =>
+          Math.round(
+            (feedbackLog.reduce((s, f) => s + f.scores[key], 0) / feedbackLog.length) * 10
+          ) / 10;
+        const record: SessionRecord = {
+          id: String(Date.now()),
+          completedAt: Date.now(),
+          role: profile.role,
+          seniority: profile.seniority,
+          companyType: profile.companyType,
+          questionsAnswered: feedbackLog.length,
+          avgOverall: avg("overall"),
+          avgStructure: avg("structure"),
+          avgSpecificity: avg("specificity"),
+          avgImpact: avg("impactClarity"),
+        };
+        await appendSessionRecord(record);
+      }
+      router.replace("/progress");
       return;
     }
 

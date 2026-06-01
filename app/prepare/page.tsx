@@ -58,7 +58,7 @@ export default function PreparePage() {
           generatedAt: Date.now(),
         },
       });
-      router.push("/interview");
+      router.push("/research");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed");
     } finally {
@@ -122,8 +122,8 @@ export default function PreparePage() {
             {loading ? "Building questions..." : "Build my questions"}
             <ArrowRight className="h-5 w-5" />
           </button>
-          <Link href="/interview" className="btn-secondary w-full text-center text-sm">
-            Skip, use default questions
+          <Link href="/research" className="btn-secondary w-full text-center text-sm">
+            Skip tailoring
           </Link>
         </div>
       </div>

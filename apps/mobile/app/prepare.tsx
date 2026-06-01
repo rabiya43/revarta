@@ -46,7 +46,7 @@ export default function PrepareScreen() {
           generatedAt: Date.now(),
         },
       });
-      router.push("/session");
+      router.push("/research");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed");
     } finally {
@@ -89,9 +89,9 @@ export default function PrepareScreen() {
         )}
       </Pressable>
 
-      <Link href="/session" asChild>
+      <Link href="/research" asChild>
         <Pressable style={styles.secondary}>
-          <Text style={styles.secondaryText}>Skip</Text>
+          <Text style={styles.secondaryText}>Skip tailoring</Text>
         </Pressable>
       </Link>
     </ScrollView>

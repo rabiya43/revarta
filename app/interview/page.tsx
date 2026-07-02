@@ -26,10 +26,13 @@ import type {
   Question,
   TurnMessage,
 } from "@/lib/types";
+import { InterviewScene } from "@/components/SceneCanvas";
+import type { OrbState } from "@/components/three/InterviewerOrb";
+import { AnimatePresence, motion } from "framer-motion";
 import { RefreshCw, Send, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Phase = "loading" | "interviewer" | "answering" | "feedback" | "complete";
 
@@ -283,6 +286,15 @@ export default function InterviewPage() {
   const displayInterviewerText =
     interviewer.isStreaming ? interviewer.text : lastInterviewerMsg?.content ?? interviewer.text;
 
+  const orbState = useMemo<OrbState>(() => {
+    if (phase === "answering") return "listening";
+    if (phase === "feedback") return feedbackLoading ? "thinking" : "idle";
+    if (phase === "interviewer" || phase === "loading") {
+      return interviewer.isStreaming ? "speaking" : "thinking";
+    }
+    return "idle";
+  }, [phase, interviewer.isStreaming, feedbackLoading]);
+
   return (
     <main className="mx-auto min-h-dvh max-w-lg px-4 pb-32 pt-4">
       <header className="mb-4 flex items-center justify-between">
@@ -292,15 +304,32 @@ export default function InterviewPage() {
         </span>
       </header>
 
-      {companyBrief && <CompanyBriefCard brief={companyBrief} compact />}
+      <InterviewScene orbState={orbState} />
 
+      {companyBrief && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4"
+        >
+          <CompanyBriefCard brief={companyBrief} compact />
+        </motion.div>
+      )}
+
+      <AnimatePresence mode="wait">
       {(phase === "interviewer" || phase === "loading") && (
-        <>
+        <motion.div
+          key="interviewer"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25 }}
+        >
           {interviewer.isStreaming || !displayInterviewerText ? (
             <InterviewerSkeleton />
           ) : null}
           {displayInterviewerText && (
-            <div className="glass-card mb-4 p-5">
+            <div className="glass-card mb-4 mt-4 p-5">
               <div className="mb-3 flex items-center gap-2">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-coral-500 text-white text-sm font-bold">
                   A
@@ -333,12 +362,18 @@ export default function InterviewPage() {
               </button>
             </div>
           )}
-        </>
+        </motion.div>
       )}
 
       {phase === "answering" && (
-        <>
-          <div className="glass-card mb-4 p-5">
+        <motion.div
+          key="answering"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25 }}
+        >
+          <div className="glass-card mb-4 mt-4 p-5">
             <div className="mb-3 flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-coral-500 text-white text-sm font-bold">
                 A
@@ -381,11 +416,18 @@ export default function InterviewPage() {
             <Send className="h-5 w-5" />
             Submit answer
           </button>
-        </>
+        </motion.div>
       )}
 
       {phase === "feedback" && (
-        <div className="space-y-4">
+        <motion.div
+          key="feedback"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25 }}
+          className="mt-4 space-y-4"
+        >
           {feedbackLoading && <FeedbackSkeleton />}
           {feedbackError && (
             <div className="rounded-2xl bg-coral-50 p-4 text-center">
@@ -408,8 +450,9 @@ export default function InterviewPage() {
                   : "Next question"}
             </button>
           )}
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       <p className="mt-6 text-center text-xs text-ink-300">
         <Link href="/" className="underline">

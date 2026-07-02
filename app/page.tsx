@@ -1,5 +1,9 @@
+"use client";
+
+import { HeroScene } from "@/components/SceneCanvas";
 import { SiteNav } from "@/components/SiteNav";
 import { StoreBadges } from "@/components/StoreBadges";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -29,6 +33,15 @@ const steps = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.45, ease: "easeOut" as const },
+  }),
+};
+
 export default function HomePage() {
   return (
     <>
@@ -36,60 +49,87 @@ export default function HomePage() {
       <main>
         <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 lg:pb-24 lg:pt-20">
           <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
-            <div>
-              <p className="mb-4 text-sm font-bold text-violet-600">Web + iOS + Android</p>
-              <h1 className="mb-6 text-4xl font-black leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+            <motion.div initial="hidden" animate="visible">
+              <motion.p custom={0} variants={fadeUp} className="mb-4 text-sm font-bold text-violet-600">
+                Web + iOS + Android
+              </motion.p>
+              <motion.h1
+                custom={1}
+                variants={fadeUp}
+                className="mb-6 text-4xl font-black leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
+              >
                 Mock interviews built for{" "}
                 <span className="gradient-text">how you actually prep</span>
-              </h1>
-              <p className="mb-8 max-w-lg text-lg text-ink-500 leading-relaxed">
+              </motion.h1>
+              <motion.p
+                custom={2}
+                variants={fadeUp}
+                className="mb-8 max-w-lg text-lg text-ink-500 leading-relaxed"
+              >
                 Revarta is practice that pushes back: follow-up questions, honest scores, voice
                 mode, and questions tailored to your resume and the job you want.
-              </p>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              </motion.p>
+              <motion.div custom={3} variants={fadeUp} className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <Link href="/onboarding" className="btn-primary text-base">
                   Start on the web
                   <ArrowRight className="h-5 w-5" />
                 </Link>
                 <StoreBadges size="lg" />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="glass-card relative mx-auto w-full max-w-md p-6 lg:max-w-none">
-              <div className="mb-4 flex items-center justify-between text-xs font-medium text-ink-400">
-                <span>Live session</span>
-                <span className="rounded-full bg-mint-100 px-2 py-0.5 text-mint-700">Recording</span>
-              </div>
-              <div className="mb-4 rounded-2xl bg-violet-50 p-4 text-sm text-ink-700">
-                You mentioned cutting deploy time by half. What metric proved that, and what did you
-                own versus the team?
-              </div>
-              <div className="mb-4 rounded-2xl border border-ink-100 bg-white p-4 text-sm text-ink-500">
-                Your answer (voice or text) shows up here...
-              </div>
-              <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                {["Structure", "Specificity", "Impact", "Pacing"].map((label) => (
-                  <div key={label} className="rounded-xl bg-ink-50 py-2 font-medium text-ink-600">
-                    {label}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative mx-auto w-full max-w-md lg:max-w-none"
+            >
+              <HeroScene />
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.4 }}
+                className="glass-card absolute -bottom-4 left-4 right-4 p-4 sm:left-6 sm:right-6"
+              >
+                <div className="mb-2 flex items-center justify-between text-xs font-medium text-ink-400">
+                  <span>Live session</span>
+                  <span className="rounded-full bg-mint-100 px-2 py-0.5 text-mint-700">3D room</span>
+                </div>
+                <p className="text-sm text-ink-600 leading-relaxed">
+                  Step into a virtual interview room with Alex — your AI coach who asks real
+                  follow-ups and scores every answer.
+                </p>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
         <section id="how" className="border-t border-ink-100 bg-white px-4 py-16 sm:px-6">
           <div className="mx-auto max-w-6xl">
-            <h2 className="mb-10 text-center text-3xl font-black sm:text-left">How it works</h2>
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10 text-center text-3xl font-black sm:text-left"
+            >
+              How it works
+            </motion.h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {steps.map((step, i) => (
-                <article key={step.title} className="glass-card p-6">
+                <motion.article
+                  key={step.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                  className="glass-card p-6"
+                >
                   <span className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-500 text-sm font-bold text-white">
                     {i + 1}
                   </span>
                   <h3 className="mb-2 text-lg font-bold">{step.title}</h3>
                   <p className="text-sm text-ink-500 leading-relaxed">{step.text}</p>
-                </article>
+                </motion.article>
               ))}
             </div>
           </div>
@@ -107,12 +147,19 @@ export default function HomePage() {
                 title: "Same flow on mobile",
                 text: "iOS and Android apps share the same backend.",
               },
-            ].map(({ icon: Icon, title, text }) => (
-              <div key={title} className="rounded-2xl border border-ink-100 bg-white p-5">
+            ].map(({ icon: Icon, title, text }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06, duration: 0.35 }}
+                className="rounded-2xl border border-ink-100 bg-white p-5"
+              >
                 <Icon className="mb-3 h-6 w-6 text-violet-500" />
                 <h3 className="font-bold">{title}</h3>
                 <p className="mt-1 text-sm text-ink-500">{text}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -130,7 +177,12 @@ export default function HomePage() {
         </section>
 
         <section className="px-4 py-16 sm:px-6">
-          <div className="mx-auto max-w-3xl rounded-3xl bg-gradient-to-br from-violet-500 to-coral-500 p-8 text-center text-white sm:p-12">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="mx-auto max-w-3xl rounded-3xl bg-gradient-to-br from-violet-500 to-coral-500 p-8 text-center text-white sm:p-12"
+          >
             <h2 className="mb-4 text-3xl font-black">Ready for a rep?</h2>
             <p className="mb-8 text-white/90">No account required for your first session.</p>
             <Link
@@ -140,7 +192,7 @@ export default function HomePage() {
               Start now
               <ArrowRight className="h-5 w-5" />
             </Link>
-          </div>
+          </motion.div>
         </section>
 
         <footer className="border-t border-ink-100 px-4 py-8 text-center text-sm text-ink-400 sm:px-6">
